@@ -1,0 +1,5 @@
+[talend-7.1-base]
+name=Talend Core 7.1 Base
+baseurl='{{ rpm_repo_url }}'
+enabled=1
+gpgcheck=0

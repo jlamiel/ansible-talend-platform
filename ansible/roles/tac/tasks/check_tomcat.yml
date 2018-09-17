@@ -1,0 +1,26 @@
+---
+
+- name: Check talend-tomcat status in case of using embedded talend-tomcat
+  command: "rpm -qa talend-tomcat"
+  args:
+    warn: no
+  when: tac_use_talend_tomcat == "yes"
+  register: tomcat_rpm_status
+
+- name: Check that talend-tomcat is installed
+  fail:
+    msg: "{{ app_name }} RPM requires talend-tomcat RPM, but it is not installed, please check that 'tomcat' role is in the list"
+  when: tac_use_talend_tomcat == "yes" and tomcat_rpm_status.stdout == ""
+
+# Next we check that talend-tomcat is installed with correct prefix, otherwise it will not work
+- name: Check actual installed path for talend-tomcat
+  shell: "rpm -ql talend-tomcat | grep -v '/etc/talend/' | head -n 1"
+  args:
+    warn: no
+  when: tac_use_talend_tomcat == "yes"
+  register: talend_tomcat_install_path
+
+- name: Check that talend-tomcat is installed in correct location
+  fail:
+    msg: "Talend-tomcat RPM is installed, but in other location: {{ talend_tomcat_install_path.stdout }}"
+  when: tac_use_talend_tomcat == "yes" and talend_tomcat_install_path.stdout != install_prefix

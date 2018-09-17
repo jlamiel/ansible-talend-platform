@@ -1,0 +1,7 @@
+---
+# defaults file for java
+java_type: jre
+java_version: 8
+java_subversion: 161
+java_upload_path: /tmp
+java_set_javahome: false

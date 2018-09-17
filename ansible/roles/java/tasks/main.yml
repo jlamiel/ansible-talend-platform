@@ -1,0 +1,11 @@
+---
+# tasks file for java
+- debug:
+    msg: "We'll start to install the Oracle {{ java_type }} {{ java_version }}u{{ java_subversion }}"
+- name: Run Oracle JDK installation
+  import_tasks: redhat.yml
+  when: ansible_os_family == "RedHat"
+#- import_tasks: debian.yml
+#  when: ansible_os_family == "Debian"
+- debug:
+    msg: "Install of Oracle {{ java_type }} {{ java_version }}u{{ java_subversion }} done"

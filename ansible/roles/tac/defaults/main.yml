@@ -1,0 +1,65 @@
+---
+
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name:   'Talend TAC'
+rpm_name:   'talend-tac'
+rpm_folder: 'tac'
+
+##########################################################################
+# TAC-specific configuration variables
+# We will use "tac_" prefix in var names
+##########################################################################
+
+#####
+# Tomcat-selection variables
+#####
+
+# This var shows whether we should use talend-tomcat in 'shared' mode (default settings)
+tac_use_talend_tomcat: "yes"      # allowed values are "yes" or "no"
+
+# The following variables will be taken in account only if tac_use_talend_tomcat == "no"
+tac_tomcat_home:  "/opt/tomcat"   # home folder for customer's tomcat
+tac_tomcat_mode:  "direct"        # can be one of "direct" or "shared"
+tac_tomcat_setup: "no"            # whether to update customer's tomcat configuration (ports)
+tac_tomcat_port:  "8080"          # tomcat_port is used only if tomcat_setup == "yes"
+
+#####
+# Installation as systemd service
+#####
+tac_install_systemd:  "yes"       # allowed values "yes" and "no"
+
+
+# Admin user/password
+TAC_ADMIN_USER: 'security@company.com'
+TAC_ADMIN_PASS: 'admin'
+
+# Use SSO (0 or 1)
+TAC_USE_SSO: 0
+
+
+# TAC web-application name, default is org.talend.administrator
+TAC_WEBAPP_NAME: org.talend.administrator
+
+# This block controls what Tomcat will be used: customer-provided, or Talend-tomcat
+#
+# When using installation into customer-provided tomcat, set this variables to not empty values
+TOMCAT_HOME: /usr/tomcat
+
+# Tomcat mode: can be direct or shared
+TOMCAT_MODE: 'direct'
+
+TOMCAT_SETUP: '0'
+
+TOMCAT_PORT: 8080
+
+# Database parameters
+# TAC_DATABASE = h2 | mysql | oracle | mssql | postgresql 
+TAC_DATABASE: h2
+
+TAC_DB_HOST: localhost
+TAC_DB_PORT: 3306
+TAC_DB_NAME: talend_administrator
+TAC_DB_USER: talend
+TAC_DB_PASSWORD: talend

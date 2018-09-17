@@ -1,0 +1,15 @@
+---
+# tasks file for java
+- name: Copy Java file to server
+  copy:
+    src: "{{ java_type }}-{{ java_version }}u{{ java_subversion }}-linux-x64.rpm"
+    dest: "{{ java_upload_path }}/"
+    mode: 0644
+- name: Install Java RPM
+  yum:
+    name: "{{ java_upload_path }}/{{ java_type }}-{{ java_version }}u{{ java_subversion }}-linux-x64.rpm"
+    state: present
+    allow_downgrade: yes
+  register: java_upgraded
+
+  

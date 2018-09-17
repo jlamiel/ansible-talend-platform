@@ -1,0 +1,29 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# There are a number of parameters which are supplied to RPM install action
+#   (like tomcat folder, systemd service status etc.)
+# If application is already installed and these parameters were changed, we need to update those
+#
+# Used variables:
+#  - inst_params_status.stat.exists (from check_status.yml) - must be true
+
+# Getting current parameters
+- name: Get current value for TALEND_INSTALL_SYSTEMD
+  shell: "cat {{ install_prefix }}/{{ rpm_folder }}/install.params | grep TALEND_INSTALL_SYSTEMD | awk -F= '{ print $2 }'"
+  register: tac_talend_install_systemd_value
+
+- name: Get current value for TALEND_TOMCAT_HOME
+  shell: "cat {{ install_prefix }}/{{ rpm_folder }}/install.params | grep TALEND_TOMCAT_HOME | awk -F= '{ print $2 }'"
+  register: tac_talend_tomcat_home_value
+
+# If tomcat_home was changed, we need to undeploy TAC from old tomcat and then to deploy it to the new one
+- name: "Undeploy {{ app_name }} from old tomcat"
+  when: tac_use_talend_tomcat == 'yes' and tac_talend_tomcat_home_value.stdout != '{{ install_prefix }}/tomcat' or
+        tac_use_talend_tomcat != 'yes' and tac_talend_tomcat_home_value.stdout == '{{ install_prefix }}/tomcat' or
+        tac_talend_tomcat_home_value.stdout != tac_tomcat_home
+  shell: "{{ install_prefix }}/{{ rpm_folder }}/talend-resourses/undeploy.sh"
+
+#
+# Update Application parameters for new one
+#

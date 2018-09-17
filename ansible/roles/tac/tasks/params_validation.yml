@@ -1,0 +1,42 @@
+---
+# This script performs different parameters validation
+
+#
+# Validation for talend-tomcat installation parameters
+#
+- fail:
+    msg: Wrong value for parameter "tac_use_talend_tomcat", must be "yes" or "no"
+  when: tac_use_talend_tomcat != "yes" and tac_use_talend_tomcat != "no"
+
+- fail:
+    msg: No values is specified for "tac_tomcat_home"
+  when: tac_use_talend_tomcat == "no" and tac_tomcat_home == ""
+
+- fail:
+    msg: Wrong value for parameter "tac_tomcat_mode", must be "direct" or "shared"
+  when: tac_use_talend_tomcat == "no" and tac_tomcat_mode != "direct" and tac_tomcat_mode != "shared"
+
+- fail:
+    msg: Wrong value for parameter "tac_tomcat_setup", must be "yes" or "no"
+  when: tac_use_talend_tomcat == "no" and tac_tomcat_setup != "yes" and tac_tomcat_setup != "no"
+
+- fail:
+    msg: Wrong value for parameter "tac_tomcat_port", must be a valid number
+  when: tac_use_talend_tomcat == "no" and tac_tomcat_setup == "yes" and tac_tomcat_port|int == 0
+
+- fail:
+    msg: Wrong value for parameter "tac_tomcat_port", must be a valid number
+  when: tac_use_talend_tomcat == "no" and tac_tomcat_setup == "yes" and ( tac_tomcat_port|int  > 65535 or tac_tomcat_port|int < 0 )
+
+#
+# Validation for SystemD installation parameter
+#
+- fail:
+    msg: Wrong value for parameter "tac_install_systemd", must be "yes" or "no"
+  when: tac_install_systemd != "yes" and tac_install_systemd != "no"
+
+
+######################################
+# TAC-specific parameters validation
+######################################
+
